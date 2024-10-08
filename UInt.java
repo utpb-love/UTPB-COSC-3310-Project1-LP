@@ -137,6 +137,18 @@ public class UInt {
                     this.bits[this.length - i - 1] &
                             u.bits[u.length - i - 1];
         }
+        // In the specific case that this.length is greater, there are additional elements of
+        //   this.bits that are not getting ANDed against anything.
+        // Depending on the implementation, we may want to treat the operation as implicitly padding
+        //   the u.bits array to match the length of this.bits, in which case what we actually
+        //   perform is simply setting the remaining indices of this.bits to false.
+        // Note that while this logic is helpful for the AND operation if we want to use this
+        //   implementation (implicit padding), it is never necessary for the OR and XOR operations.
+        if (this.length > u.length) {
+            for (int i = u.length; i < this.length; i++) {
+                this.bits[this.length - i - 1] = false;
+            }
+        }
     }
 
     /**
@@ -148,7 +160,7 @@ public class UInt {
      */
     public static UInt and(UInt a, UInt b) {
         UInt temp = a.clone();
-        temp.add(b);
+        temp.and(b);
         return temp;
     }
 
