@@ -16,5 +16,8 @@ public class Test {
         UInt u4 = new UInt(39);
         System.out.println(u1);
         System.out.println(u1.toInt());
+
+        u1.add(u2);
+        u2.add(u3);
     }
 }
