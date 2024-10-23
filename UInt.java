@@ -46,6 +46,14 @@ public class UInt {
         }
         // Determine the number of bits needed to store i in binary format.
         length = (int)(Math.ceil(Math.log(i)/Math.log(2.0)) + 1);
+
+        // the length is 1 bit too short for values that are exact powers of 2
+        // so we will test to check if length - 1 is an exact power of 2, and if it is, then we will increase length by 1
+        int testSize = (int)(Math.pow(2, (double)length - 1));
+        if (testSize == i) {
+            length++;
+        }
+        
         bits = new boolean[length];
 
         // Convert the integer to binary and store each bit in the array.
@@ -330,8 +338,8 @@ public class UInt {
         // for this to function properly, the boolean arrays of the UInt objects have to be the same size
         int max = Math.max(this.length, u.length);
         int min = Math.min(this.length, u.length);
-        boolean[] newNegated = new boolean[max];
 
+        boolean[] newNegated = new boolean[max];
         System.arraycopy(negated.bits, 0, newNegated, max - min, negated.length); // copy the old array to the new one, starting from the index equal to the difference in the sizes
         // change negated size and length to newNegated
         negated.bits = newNegated;
@@ -540,7 +548,7 @@ public class UInt {
     }
 
     private boolean[] ignoreOverflowAdd(boolean[] array, boolean[] array2) {
-        // basically copy the add method but implement for arrays instead of UInt objects
+        // basically copy the add method but implement for arrays instead of UInt objects and ignore the overflow handling
 
         int length = array.length;
         boolean[] result = new boolean[length]; // this.bits will be changed to this array at the end of all the addition
